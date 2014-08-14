@@ -39,7 +39,7 @@ gulp.task('lib', function() {
         .pipe(gulp.dest('assets/scripts/lib'))
         .pipe(rename({suffix: '.min'}))
         .pipe(gulp.dest('assets/scripts/lib'))
-        .pipe(notify({ message: 'Scripts task complete' }));
+        .pipe(notify({ message: 'Libs task complete' }));
 });
 
 gulp.task('scripts', function() {
