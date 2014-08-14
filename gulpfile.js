@@ -11,7 +11,8 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     notify = require('gulp-notify'),
     cache = require('gulp-cache'),
-    livereload = require('gulp-livereload');
+    livereload = require('gulp-livereload'),
+    mainBowerFiles = require('main-bower-files');
 
 // Styles
 gulp.task('styles', function() {
@@ -26,9 +27,23 @@ gulp.task('styles', function() {
 });
 
 // Scripts
+gulp.task('lib', function() {
+    return gulp.src(mainBowerFiles({
+            paths: {
+                bowerDirectory: 'bower_components',
+                bowerJson: 'bower.json'
+            }
+        }))
+        .pipe(concat('plugins.js'))
+        .pipe(gulp.dest('assets/scripts/lib'))
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest('assets/scripts/lib'))
+        .pipe(notify({ message: 'Scripts task complete' }));
+});
+
 gulp.task('scripts', function() {
-  return gulp.src(['bower_components/jquery/dist/jquery.js', 'src/scripts/**/*.js'])
-    //.pipe(jshint('.jshintrc'))
+  return gulp.src('src/scripts/**/*.js')
+    .pipe(jshint())
     .pipe(jshint.reporter('default'))
     .pipe(concat('main.js'))
     .pipe(gulp.dest('assets/scripts'))
@@ -64,7 +79,7 @@ gulp.task('watch', function() {
   gulp.watch('src/styles/**/*.scss', ['styles']);
 
   // Watch .js files
-  gulp.watch('src/scripts/**/*.js', ['scripts']);
+  gulp.watch('src/scripts/**/*.js', ['lib', 'scripts']);
 
   // Watch image files
   gulp.watch('src/images/**/*', ['images']);
