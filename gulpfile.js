@@ -29,6 +29,7 @@ gulp.task('styles', function() {
 // Scripts
 gulp.task('lib', function() {
     return gulp.src(mainBowerFiles({
+            filter: /.js/i,
             paths: {
                 bowerDirectory: 'bower_components',
                 bowerJson: 'bower.json'
